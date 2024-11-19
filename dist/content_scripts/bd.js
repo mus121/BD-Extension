@@ -1,0 +1,1 @@
+setBDAuth_Token();const interval=setInterval((()=>{setBDAuth_Token()}),2e3);function setBDAuth_Token(){try{if(document.cookie.includes("SESSION_TOKEN=")&&chrome.runtime?.id){var e=document.cookie.split("SESSION_TOKEN=")[1];chrome.storage.local.set({AUTH_TOKEN:e}),console.log("hellllllllllllll")}else clearInterval(interval)}catch(e){}}

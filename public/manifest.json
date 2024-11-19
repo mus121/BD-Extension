@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "BD Application",
+  "short_name": "BD",
+  "version": "1.0",
+  "description": "Fetching For Data Extractions..",
+  "action": {
+    "default_title": "BD",
+    "default_popup": "popup.html"
+  },
+  "host_permissions": [
+    "https://*/*",
+    "https://localhost:3000/*",
+    "*://*.linkedin.com/*"
+  ],
+  "permissions": [
+    "tabs",
+    "unlimitedStorage",
+    "storage",
+    "alarms",
+    "scripting",
+    "activeTab",
+    "webNavigation",
+    "cookies"
+  ],
+  "externally_connectable": {
+    "matches": ["https://localhost:3000/*"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.linkedin.com/*"],
+      "js": ["content_scripts/linkedin.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://localhost:3000/*"],
+      "js": ["content_scripts/bd.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
