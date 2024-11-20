@@ -12,7 +12,7 @@ export type VectorImage = {
   rootUrl: string;
 };
 
-export type MiniProfile = {
+export type UserProfile = {
   firstName: string;
   lastName: string;
   publicIdentifier: string;
@@ -21,7 +21,7 @@ export type MiniProfile = {
 };
 
 export type TMeProfile = {
-  miniProfile: MiniProfile;
+  userProfile: UserProfile;
   publicContactInfo?: {
     emailAddress?: string;
   };
@@ -38,22 +38,22 @@ export type TUserBasicInfo = {
 };
 
 export const extractUserBasicInfo = (profile: TMeProfile): TUserBasicInfo => {
-  const { miniProfile, publicContactInfo } = profile;
+  const { userProfile, publicContactInfo } = profile;
 
   // Extract Name
-  const name = `${miniProfile.firstName} ${miniProfile.lastName}`;
+  const name = `${userProfile.firstName} ${userProfile.lastName}`;
 
   // Extract Email
   const email = publicContactInfo?.emailAddress || null;
 
   // Extract Profile Picture URL
   const profilePicture =
-    miniProfile.picture?.["com.linkedin.common.VectorImage"]?.rootUrl +
-      miniProfile.picture?.["com.linkedin.common.VectorImage"]?.artifacts[0]
+    userProfile.picture?.["com.linkedin.common.VectorImage"]?.rootUrl +
+      userProfile.picture?.["com.linkedin.common.VectorImage"]?.artifacts[0]
         ?.fileIdentifyingUrlPathSegment || null;
 
   // Extract Location
-  const location = miniProfile?.location || null;
+  const location = userProfile?.location || null;
 
   // Extract Education
   const education = profile?.education?.[0]?.degree || null;

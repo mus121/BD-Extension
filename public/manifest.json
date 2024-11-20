@@ -9,8 +9,8 @@
     "default_popup": "popup.html"
   },
   "host_permissions": [
-    "https://*/*",
-    "https://localhost:3000/*",
+    "http://*/*",
+    "http://localhost:3000/*",
     "*://*.linkedin.com/*"
   ],
   "permissions": [
@@ -24,7 +24,7 @@
     "cookies"
   ],
   "externally_connectable": {
-    "matches": ["https://localhost:3000/*"]
+    "matches": ["http://localhost:3000/*"]
   },
   "content_scripts": [
     {
@@ -34,7 +34,7 @@
       "all_frames": false
     },
     {
-      "matches": ["https://localhost:3000/*"],
+      "matches": ["http://localhost:3000/*"],
       "js": ["content_scripts/bd.js"],
       "run_at": "document_start",
       "all_frames": false

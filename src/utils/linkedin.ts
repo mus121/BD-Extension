@@ -12,7 +12,7 @@ export const linkedinApiCall = async <ResponseType>(
   const csrfToken = await fetchStorageItem<string>("csrf_token");
 
   if (csrfToken) {
-    return await fetch(`https://www.linkedin.com${endpoint}`, {
+    return await fetch(`${process.env.LINKEDIN_HOST_URL}${endpoint}`, {
       ...options,
       headers: {
         ...options.headers,
@@ -55,45 +55,60 @@ export const linkedinApiCall = async <ResponseType>(
   return null;
 };
 
-const fetchCachedUserProfile = async (): Promise<null | TUserBasicInfo> => {
-  const lastFetchedTimestamp = await fetchStorageItem("lastFetchedTimestamp");
-  const cachedProfile = await fetchStorageItem("cachedProfile");
+// const fetchCachedUserProfile = async (): Promise<null | TUserBasicInfo> => {
+//   const lastFetchedTimestamp = await fetchStorageItem("lastFetchedTimestamp");
+//   const cachedProfile = await fetchStorageItem("cachedProfile");
 
-  if (
-    typeof cachedProfile === "string" &&
-    typeof lastFetchedTimestamp === "string" &&
-    !isOneDayOld(Number(lastFetchedTimestamp))
-  ) {
-    return JSON.parse(cachedProfile) as TUserBasicInfo;
-  }
+//   if (
+//     typeof cachedProfile === "string" &&
+//     typeof lastFetchedTimestamp === "string" &&
+//     !isOneDayOld(Number(lastFetchedTimestamp))
+//   ) {
+//     return JSON.parse(cachedProfile) as TUserBasicInfo;
+//   }
 
-  await saveToStorage("lastFetchedTimestamp", Date.now().toString());
+//   await saveToStorage("lastFetchedTimestamp", Date.now().toString());
 
-  const profileResponse = await linkedinApiCall<TMeProfile>("/voyager/api/me", {
-    method: "GET",
-  });
+//   const profileResponse = await linkedinApiCall<TMeProfile>("/voyager/api/me", {
+//     method: "GET",
+//   });
 
-  if (
-    profileResponse &&
-    "miniProfile" in profileResponse &&
-    profileResponse.miniProfile.publicIdentifier
-  ) {
-    const userBasicInfo = extractUserBasicInfo(profileResponse);
-    await saveToStorage("cachedProfile", JSON.stringify(userBasicInfo));
-    return userBasicInfo;
-  }
+//   if (
+//     profileResponse &&
+//     "userProfile" in profileResponse &&
+//     profileResponse.userProfile.publicIdentifier
+//   ) {
+//     const userBasicInfo = extractUserBasicInfo(profileResponse);
+//     await saveToStorage("cachedProfile", JSON.stringify(userBasicInfo));
+//     return userBasicInfo;
+//   }
 
-  throw new Error("An unknown error occurred while fetching the profile.");
-};
+//   throw new Error("An unknown error occurred while fetching the profile.");
+// };
 
 export const fetchLinkedinProfileData = async () => {
   //   const me = await fetchCachedUserProfile(); // Fetch the user's data
 
   // Call LinkedIn API to get the profile data
-  console.log("helllllllllllll");
   const response = await linkedinApiCall("/voyager/api/me", {
-    method: "GET", // Example method (GET or POST depending on your use case)
+    method: "GET",
   });
 
-  console.log("LinkedIn Profile Data:", response); // Handle or return the LinkedIn API response
+  console.log("LinkedIn Profile Data:", response);
+  return response;
+};
+
+export const fetchLinkedinConnections = async () => {
+  //   const me = await fetchCachedUserProfile(); // Fetch the user's data
+
+  // Call LinkedIn API to get the profile data
+  const response = await linkedinApiCall(
+    "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionListWithProfile-16&count=8&q=search&sortType=RECENTLY_ADDED&start=0",
+    {
+      method: "GET",
+    }
+  );
+
+  console.log("Linkedin Profile Connections", response);
+  return response;
 };
