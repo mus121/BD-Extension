@@ -103,7 +103,9 @@ export const fetchLinkedinConnections = async () => {
 
   // Call LinkedIn API to get the profile data
   const response = await linkedinApiCall(
-    "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionListWithProfile-16&count=40&q=search&sortType=RECENTLY_ADDED&start=0",
+    // "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionListWithProfile-16&count=40&q=search&sortType=RECENTLY_ADDED&start=0",
+    // "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionList-16&count=100&keyword=ha&q=search&start=40",
+    "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionList-16&count=100&keyword=%3D&q=search&start=0",
     {
       method: "GET",
     }
