@@ -2,26 +2,21 @@ import { deleteFromSTorage } from "./utils";
 import {
   fetchLinkedinProfileData,
   fetchLinkedinConnections,
+  connectionCount,
 } from "./utils/linkedin";
-
 chrome.runtime.onInstalled.addListener(function (extension_detail) {
   // Save BD_Host in chrome.storage
   chrome.storage.local.set({ BD_Host: "http://localhost:3000" });
-
   chrome.alarms.create("ALARAMS_ON", { periodInMinutes: 1 });
-
   chrome.tabs.query({}, (keys_tabs) => {
     chrome.storage.local.get("BD_Host", (data) => {
       const BD_Host = data.BD_Host || "http://localhost:3000";
-
       const LinkedIn = keys_tabs.filter((key) => {
         return key.url.includes("https://www.linkedin.com");
       });
-
       const BD_Tabs = keys_tabs.filter((key) => {
         return key.url.includes(BD_Host);
       });
-
       if (LinkedIn.length > 0) {
         const tab = LinkedIn[0];
         chrome.scripting.executeScript({
@@ -33,7 +28,6 @@ chrome.runtime.onInstalled.addListener(function (extension_detail) {
           url: "https://www.linkedin.com",
         });
       }
-
       if (BD_Tabs.length > 0) {
         const tab = BD_Tabs[0];
         chrome.scripting.executeScript({
@@ -43,57 +37,72 @@ chrome.runtime.onInstalled.addListener(function (extension_detail) {
       }
     });
   });
-
   if (extension_detail.reason == "install") {
     chrome.storage.local.clear();
-    fetchLinkedinProfileData();
+    const start = 0;
+    fetchLinkedinProfileData(start);
     fetchLinkedinConnections();
+    connectionCount();
   }
   if (extension_detail.reason == "update") {
-    fetchLinkedinProfileData();
+    const start = 0;
+    fetchLinkedinProfileData(start);
     fetchLinkedinConnections();
+    connectionCount();
   }
 });
-
 chrome.alarms.onAlarm.addListener((alarm) => {
   switch (alarm.name) {
     case "ALARAMS_ON": {
-      fetchLinkedinProfileData();
+      const start = 0;
+      fetchLinkedinProfileData(start);
       fetchLinkedinConnections();
+      connectionCount();
       break;
     }
     default:
       break;
   }
 });
-
 chrome.runtime.onMessageExternal.addListener(
-  (message: { type: string }, _sender, sendResponse) => {
-    const { type } = message;
-
+  (message: { type: string; start?: number }, _sender, sendResponse) => {
+    const { type, start } = message;
     switch (type) {
       case "MESSAGE": {
         return sendResponse({
           signal: true,
         });
+        break;
       }
       case "LINKEDINPROFILE": {
-        fetchLinkedinProfileData()
+        fetchLinkedinProfileData(start)
           .then((response) => {
             sendResponse({ response });
           })
           .catch((error) => {
             sendResponse({ error: "Failed to fetch LinkedIn profile data" });
           });
+        break;
       }
       case "LINKEDCONNECTION": {
-        fetchLinkedinConnections()
+        fetchLinkedinConnections(start)
           .then((response) => {
             sendResponse({ response });
           })
           .catch((error) => {
             sendResponse({ error: "Failed to fetch LinkedIn profile data" });
           });
+        break;
+      }
+      case "LINKEDTOTALCONNECTION": {
+        connectionCount()
+          .then((response) => {
+            sendResponse({ response });
+          })
+          .catch((error) => {
+            sendResponse({ error: "Failed to fetch LinkedIn profile data" });
+          });
+        break;
       }
       case "AUTHENTICATION_LOGOUT": {
         deleteFromSTorage("AUTH_TOKEN");

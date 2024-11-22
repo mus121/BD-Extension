@@ -86,7 +86,7 @@ export const linkedinApiCall = async <ResponseType>(
 //   throw new Error("An unknown error occurred while fetching the profile.");
 // };
 
-export const fetchLinkedinProfileData = async () => {
+export const fetchLinkedinProfileData = async (start: number) => {
   //   const me = await fetchCachedUserProfile(); // Fetch the user's data
 
   // Call LinkedIn API to get the profile data
@@ -98,19 +98,29 @@ export const fetchLinkedinProfileData = async () => {
   return response;
 };
 
-export const fetchLinkedinConnections = async () => {
-  //   const me = await fetchCachedUserProfile(); // Fetch the user's data
-
-  // Call LinkedIn API to get the profile data
+export const fetchLinkedinConnections = async (start = 0) => {
   const response = await linkedinApiCall(
-    // "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionListWithProfile-16&count=40&q=search&sortType=RECENTLY_ADDED&start=0",
-    // "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionList-16&count=100&keyword=ha&q=search&start=40",
-    "/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionList-16&count=100&keyword=%3D&q=search&start=0",
+    `/voyager/api/relationships/dash/connections?decorationId=com.linkedin.voyager.dash.deco.web.mynetwork.ConnectionListWithProfile-16&count=10&q=search&sortType=RECENTLY_ADDED&start=${
+      start * 10
+    }`,
     {
       method: "GET",
     }
   );
 
   console.log("Linkedin Profile Connections", response);
+  return response;
+};
+
+export const connectionCount = async () => {
+  // Call LinkedIn API to get the profile data
+  const response = await linkedinApiCall(
+    "/voyager/api/search/dash/clusters?decorationId=com.linkedin.voyager.dash.deco.search.SearchClusterCollection-1&count=0&origin=Communities&q=all&query=(queryParameters:(resultType:List(CONNECTIONS)),flagshipSearchIntent:MYNETWORK_CURATION_HUB)&start=0",
+    {
+      method: "GET",
+    }
+  );
+
+  console.log("Linkedin Total Connections", response);
   return response;
 };
