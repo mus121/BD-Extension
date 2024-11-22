@@ -124,3 +124,20 @@ export const connectionCount = async () => {
   console.log("Linkedin Total Connections", response);
   return response;
 };
+
+export const searchProfiles = async (searchTerm: string) => {
+  
+  if (!searchTerm) {
+    throw new Error("Search term is required!");
+  }
+  const encodedSearchTerm = encodeURIComponent(searchTerm);
+
+  const response = await linkedinApiCall(
+    `/voyager/api/graphql?variables=(query:${encodedSearchTerm})&queryId=voyagerSearchDashTypeahead.eeea0c1dfdf533272e9de4e98a59d725`,
+    {
+      method: "GET",
+    }
+  );
+  console.log("Specific Search Profiles", response);
+  return response;
+};

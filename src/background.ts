@@ -3,6 +3,7 @@ import {
   fetchLinkedinProfileData,
   fetchLinkedinConnections,
   connectionCount,
+  searchProfiles,
 } from "./utils/linkedin";
 chrome.runtime.onInstalled.addListener(function (extension_detail) {
   // Save BD_Host in chrome.storage
@@ -43,12 +44,14 @@ chrome.runtime.onInstalled.addListener(function (extension_detail) {
     fetchLinkedinProfileData(start);
     fetchLinkedinConnections();
     connectionCount();
+    // searchProfiles();
   }
   if (extension_detail.reason == "update") {
     const start = 0;
     fetchLinkedinProfileData(start);
     fetchLinkedinConnections();
     connectionCount();
+    // searchProfiles();
   }
 });
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -58,15 +61,17 @@ chrome.alarms.onAlarm.addListener((alarm) => {
       fetchLinkedinProfileData(start);
       fetchLinkedinConnections();
       connectionCount();
+      // searchProfiles();
       break;
     }
     default:
       break;
   }
 });
+
 chrome.runtime.onMessageExternal.addListener(
-  (message: { type: string; start?: number }, _sender, sendResponse) => {
-    const { type, start } = message;
+  (message: { type: string; start?: number, searchTerm?: string }, _sender, sendResponse) => {
+    const { type, start, searchTerm } = message;
     switch (type) {
       case "MESSAGE": {
         return sendResponse({
@@ -90,7 +95,7 @@ chrome.runtime.onMessageExternal.addListener(
             sendResponse({ response });
           })
           .catch((error) => {
-            sendResponse({ error: "Failed to fetch LinkedIn profile data" });
+            sendResponse({ error: "Failed to fetch LinkedIn Connection data" });
           });
         break;
       }
@@ -100,10 +105,28 @@ chrome.runtime.onMessageExternal.addListener(
             sendResponse({ response });
           })
           .catch((error) => {
-            sendResponse({ error: "Failed to fetch LinkedIn profile data" });
+            sendResponse({
+              error: "Failed to fetch LinkedIn Total Connection data",
+            });
           });
         break;
       }
+
+      case "SEARCHPROFILE": {
+        const { searchTerm } = message;
+
+        searchProfiles(searchTerm)
+          .then((response) => {
+            sendResponse({ response });
+          })
+          .catch((error) => {
+            sendResponse({
+              error: "Failed to fetch LinkedIn Search Profile data",
+            });
+          });
+        break;
+      }
+
       case "AUTHENTICATION_LOGOUT": {
         deleteFromSTorage("AUTH_TOKEN");
         break;
