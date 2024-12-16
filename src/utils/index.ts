@@ -27,11 +27,11 @@ export const deleteFromSTorage = (itemKey: string) => {
 };
 
 export function isOneDayOld(timestamp: number): boolean {
-    const now = new Date();
-    const targetDate = new Date(timestamp);
-  
-    const diff = now.getTime() - targetDate.getTime();
-    const millisecondsPerDay = 24 * 60 * 60 * 1000;
-  
-    return Math.abs(diff - millisecondsPerDay) < 1000 * 60 * 60; 
-  }
+  const now = new Date();
+  const targetDate = new Date(timestamp);
+
+  const diff = now.getTime() - targetDate.getTime();
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+
+  return Math.abs(diff - millisecondsPerDay) < 1000 * 60 * 60;
+}

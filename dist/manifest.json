@@ -15,12 +15,10 @@
   ],
   "permissions": [
     "tabs",
-    "unlimitedStorage",
     "storage",
     "alarms",
     "scripting",
     "activeTab",
-    "webNavigation",
     "cookies"
   ],
   "externally_connectable": {
