@@ -6,6 +6,7 @@ import { liProfile } from "@/hooks/useLiProfile";
 import { liConnections } from "@/hooks/useLiConnections";
 import { liTotalConnectionCount } from "@/hooks/useLiTotalConnectionCount";
 import { liUserLocation } from "@/hooks/useLiUserLocation";
+import { liGlobalySearch } from "@/hooks/useLiGlobalProfile";
 // import { liEducation } from "@/hooks/useLiEducation";
 
 chrome.runtime.onInstalled.addListener(function (extension_detail) {
@@ -40,12 +41,14 @@ chrome.runtime.onInstalled.addListener(function (extension_detail) {
     const publicIdentifier = "mustafa-kamal-250796252";
     liUserLocation(publicIdentifier);
     liProfile();
+    liGlobalySearch("Mustafa kamal");
     // liEducation();
   }
   if (extension_detail.reason == "update") {
     const publicIdentifier = "mustafa-kamal-250796252";
     liUserLocation(publicIdentifier);
     liProfile();
+    liGlobalySearch("Mustafa kamal");
     // liEducation();
   }
 });
@@ -56,6 +59,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
       const publicIdentifier = "mustafa-kamal-250796252";
       liProfile();
       liUserLocation(publicIdentifier);
+      liGlobalySearch("Mustafa kamal");
       break;
     }
     default:
@@ -132,6 +136,20 @@ chrome.runtime.onMessageExternal.addListener(
 
       case ExternalMessageEnum.LI_LOCATION: {
         liUserLocation(publicIdentifier)
+          .then((response) => {
+            sendResponse({ response });
+          })
+          .catch((error) => {
+            sendResponse({
+              error: "Failed to fetch LinkedIn Search Profile data",
+            });
+          });
+        break;
+      }
+
+      case ExternalMessageEnum.LI_GLOBAL_PROFILES: {
+        const { searchTerm } = message;
+        liGlobalySearch(searchTerm)
           .then((response) => {
             sendResponse({ response });
           })
