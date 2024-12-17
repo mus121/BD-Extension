@@ -79,6 +79,8 @@ chrome.runtime.onMessageExternal.addListener(
     sendResponse
   ) => {
     const { type, start, searchTerm, publicIdentifier } = message;
+
+    console.log({ message });
     switch (type) {
       case ExternalMessageEnum.MESSAGE: {
         sendResponse({
@@ -148,16 +150,14 @@ chrome.runtime.onMessageExternal.addListener(
       }
 
       case ExternalMessageEnum.LI_GLOBAL_PROFILES: {
-        const { searchTerm } = message;
-        liGlobalySearch(searchTerm)
-          .then((response) => {
-            sendResponse({ response });
-          })
-          .catch((error) => {
-            sendResponse({
-              error: "Failed to fetch LinkedIn Search Profile data",
-            });
-          });
+        liGlobalySearch(searchTerm, start).then((response) => {
+          sendResponse({ response });
+        });
+        // .catch((error) => {
+        //   sendResponse({
+        //     error: "Failed to fetch LinkedIn Search Profile data",
+        //   });
+        // });
         break;
       }
 
