@@ -1,1 +1,0 @@
-function setupLinkedInTokens(){const e=/JSESSIONID=["']?(.*?)["']?;/;function n(){try{const n=document.cookie.match(e);n&&chrome.runtime?.id&&chrome.storage.local.set({csrf_token:n[1]})}catch(e){console.error("Error extracting LinkedIn token:",e)}}n();const t=setInterval(n,5e3);clearInterval(t)}setupLinkedInTokens();

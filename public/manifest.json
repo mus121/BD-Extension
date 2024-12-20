@@ -3,16 +3,9 @@
   "name": "Business Development Extension",
   "version": "1.0",
   "description": "Product of Qlu.ai",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "permissions": ["storage", "scripting", "activeTab","cookies"],
   "host_permissions": ["*://*.linkedin.com/*"],
   "background": {
     "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["*://www.linkedin.com/*"],
-      "js": ["content_scripts/linkedin.js"],
-      "run_at": "document_start"
-    }
-  ]
+  }
 }
