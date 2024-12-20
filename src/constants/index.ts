@@ -6,7 +6,3 @@ export const LINKEDIN_API = {
     SEARCH: "/voyager/api/graphql",
   },
 };
-
-export const ALARM_INTERVALS = {
-  DATA_SYNC: 1, // minutes
-};
