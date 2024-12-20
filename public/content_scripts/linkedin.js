@@ -1,18 +1,21 @@
-setLinekincrfToken();
-const interval = setInterval(() => {
-  setLinekincrfToken();
-}, 5000);
+function setupLinkedInTokens() {
+  const JSESSIONID_REGEX = /JSESSIONID=["']?(.*?)["']?;/;
 
-function setLinekincrfToken() {
-  try {
-    const JSESSIONID_REGEX = new RegExp('JSESSIONID=["]*(.*?)["]*;');
-    if (document.cookie.match(JSESSIONID_REGEX) && chrome.runtime?.id) {
-      var csrf_token = document.cookie.match(JSESSIONID_REGEX)[1];
-      chrome.storage.local.set({ csrf_token: csrf_token });
-    } else {
-      clearInterval(interval);
+  function extractAndStoreToken() {
+    try {
+      const match = document.cookie.match(JSESSIONID_REGEX);
+      if (match && chrome.runtime?.id) {
+        chrome.storage.local.set({ csrf_token: match[1] });
+      }
+    } catch (error) {
+      console.error("Error extracting LinkedIn token:", error);
     }
-  } catch (err) {
-    // clearInterval(interval);
   }
+
+  extractAndStoreToken();
+
+  const interval = setInterval(extractAndStoreToken, 5000);
+  clearInterval(interval);
 }
+
+setupLinkedInTokens();
