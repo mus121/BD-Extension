@@ -6,6 +6,12 @@ export const handleMessage = async (
   sendResponse: (response: any) => void,
 ) => {
   switch (message.type) {
+    case MessageType.CHECK_EXTENSION: {
+      sendResponse({
+        signal: true,
+      });
+      break;
+    }
     case MessageType.FETCH_PROFILE:
       const profileResponse = await LinkedInService.getProfile();
       sendResponse(profileResponse);
