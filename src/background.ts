@@ -38,17 +38,17 @@ chrome.runtime.onInstalled.addListener(function (extension_detail) {
   });
   if (extension_detail.reason == "install") {
     chrome.storage.local.clear();
-    const publicIdentifier = "mustafa-kamal-250796252";
-    liUserLocation(publicIdentifier);
-    liProfile();
-    liGlobalySearch("Mustafa kamal");
+    // const publicIdentifier = "mustafa-kamal-250796252";
+    // liUserLocation(publicIdentifier);
+    // liProfile();
+    // liGlobalySearch("Mustafa kamal");
     // liEducation();
   }
   if (extension_detail.reason == "update") {
-    const publicIdentifier = "mustafa-kamal-250796252";
-    liUserLocation(publicIdentifier);
-    liProfile();
-    liGlobalySearch("Mustafa kamal");
+    // const publicIdentifier = "mustafa-kamal-250796252";
+    // liUserLocation(publicIdentifier);
+    // liProfile();
+    // liGlobalySearch("Mustafa kamal");
     // liEducation();
   }
 });
@@ -56,10 +56,10 @@ chrome.runtime.onInstalled.addListener(function (extension_detail) {
 chrome.alarms.onAlarm.addListener((alarm) => {
   switch (alarm.name) {
     case "ALARAMS_ON": {
-      const publicIdentifier = "mustafa-kamal-250796252";
-      liProfile();
-      liUserLocation(publicIdentifier);
-      liGlobalySearch("Mustafa kamal");
+      // const publicIdentifier = "mustafa-kamal-250796252";
+      // liProfile();
+      // liUserLocation(publicIdentifier);
+      // liGlobalySearch("Mustafa kamal");
       break;
     }
     default:
@@ -74,11 +74,12 @@ chrome.runtime.onMessageExternal.addListener(
       start?: number;
       searchTerm?: string;
       publicIdentifier?: string;
+      page?: number;
     },
     _sender,
     sendResponse
   ) => {
-    const { type, start, searchTerm, publicIdentifier } = message;
+    const { type, start, searchTerm, publicIdentifier, page } = message;
 
     console.log({ message });
     switch (type) {
@@ -150,7 +151,7 @@ chrome.runtime.onMessageExternal.addListener(
       }
 
       case ExternalMessageEnum.LI_GLOBAL_PROFILES: {
-        liGlobalySearch(searchTerm, start).then((response) => {
+        liGlobalySearch(searchTerm, page).then((response) => {
           sendResponse({ response });
         });
         // .catch((error) => {

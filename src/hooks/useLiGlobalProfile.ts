@@ -10,7 +10,6 @@ export const liGlobalySearch = async (searchTerm: string, page: number = 0) => {
       method: "GET",
     }
   );
-  console.log({ response }, "smaj aye ");
   const elements = response.data.searchDashClustersByAll?.elements || [];
   const totalCount = response.data.searchDashClustersByAll?.paging || [];
   // Transform the data into an array of profiles
