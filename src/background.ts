@@ -16,7 +16,8 @@ chrome.cookies.onChanged.addListener((changeInfo) => {
 });
 chrome.runtime.onMessageExternal.addListener(
   (message, sender, sendResponse) => {
-    handleMessage({ type: message, payload: sender }, sendResponse);
+    const {type,payload}=message
+    handleMessage({ type, payload }, sendResponse);
     return true;
-  },
+  }
 );
