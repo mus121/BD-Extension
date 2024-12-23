@@ -1,7 +1,7 @@
 import { ApiResponse, SearchProfilesApiResponse } from "@/types/apis/linkedin";
 import { linkedinApiCall } from "@/utils/linkedin";
 
-export const liGlobalSearch = async (
+export const liDropDownSearch = async (
   searchTerm: string
 ): Promise<SearchProfilesApiResponse> => {
   if (!searchTerm) {
