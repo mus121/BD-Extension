@@ -1,5 +1,4 @@
 export type LinkedinProfile = {
-  response: any;
   miniProfile: {
     anti_abuse_metadata: {
       anti_abuse_uuid: string | null;
@@ -30,4 +29,13 @@ export type LinkedinProfile = {
   };
   plainId: string | null;
   premiumSubscriber: boolean;
+};
+
+export type FilteredLinkedinProfile = {
+  firstName: string | null;
+  lastName: string | null;
+  occupation: string | null;
+  entityUrn: string | null;
+  publicIdentifier: string | null;
+  profilePicture: string | null;
 };

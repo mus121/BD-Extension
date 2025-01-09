@@ -11,7 +11,6 @@ export const liTotalConnectionCount =
         }
       );
 
-    // Check if the response is an error
     if ("error" in response) {
       throw new Error(
         `API Error: ${response.message || "Unknown error"} (Code: ${
@@ -19,6 +18,7 @@ export const liTotalConnectionCount =
         })`
       );
     }
-    // Return the successful response
-    return response;
+
+    const totalConnections = response?.metadata?.totalResultCount;
+    return totalConnections;
   };

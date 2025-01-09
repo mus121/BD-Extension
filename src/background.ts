@@ -1,12 +1,13 @@
 import { BD_HOST, LI_HOST } from "./constants";
 import { ExternalMessageEnum } from "./types/common";
 import { deleteFromSTorage } from "./utils";
-import { liDropDownSearch } from "@/hooks/useLiGlobalSearch";
+import { liDropDownSearch } from "@/hooks/useLiDropdownSearch";
 import { liProfile } from "@/hooks/useLiProfile";
 import { liConnections } from "@/hooks/useLiConnections";
 import { liTotalConnectionCount } from "@/hooks/useLiTotalConnectionCount";
 import { liUserLocation } from "@/hooks/useLiUserLocation";
 import { liGlobalySearch } from "@/hooks/useLiGlobalProfile";
+import { LiMessage } from "./types/apis/linkedin/TLiMessage";
 
 chrome.runtime.onInstalled.addListener(function () {
   chrome.tabs.query({}, (keys_tabs) => {
@@ -36,19 +37,8 @@ chrome.runtime.onInstalled.addListener(function () {
     }
   });
 });
-
 chrome.runtime.onMessageExternal.addListener(
-  (
-    message: {
-      type: string;
-      start?: number;
-      searchTerm?: string;
-      publicIdentifier?: string;
-      page?: number;
-    },
-    _sender,
-    sendResponse
-  ) => {
+  (message: LiMessage, _sender, sendResponse) => {
     const { type, start, searchTerm, publicIdentifier, page } = message;
     switch (type) {
       case ExternalMessageEnum.MESSAGE: {
@@ -131,7 +121,6 @@ chrome.runtime.onMessageExternal.addListener(
         break;
       }
 
-      // have to discuss
       case "AUTHENTICATION_LOGOUT": {
         deleteFromSTorage("AUTH_TOKEN");
         break;
