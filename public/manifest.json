@@ -1,44 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "BD Application",
-  "short_name": "BD",
+  "name": "Business Development Extension",
   "version": "1.0",
-  "description": "Fetching For Data Extractions..",
-  "action": {
-    "default_title": "BD",
-    "default_popup": "popup.html"
-  },
+  "description": "Product of Qlu.ai",
+  "permissions": ["storage", "scripting", "activeTab","cookies"],
   "host_permissions": [
-    "http://*/*",
-    "http://localhost:3000/*",
-    "*://*.linkedin.com/*"
-  ],
-  "permissions": [
-    "tabs",
-    "storage",
-    "alarms",
-    "scripting",
-    "activeTab",
-    "cookies"
-  ],
-  "externally_connectable": {
-    "matches": ["http://localhost:3000/*"]
-  },
-  "content_scripts": [
-    {
-      "matches": ["*://www.linkedin.com/*"],
-      "js": ["content_scripts/linkedin.js"],
-      "run_at": "document_start",
-      "all_frames": false
-    },
-    {
-      "matches": ["http://localhost:3000/*"],
-      "js": ["content_scripts/bd.js"],
-      "run_at": "document_start",
-      "all_frames": false
-    }
-  ],
+  "*://*.linkedin.com/*"
+],
+"externally_connectable": {
+  "matches": ["http://localhost:3000/*"]
+},
   "background": {
     "service_worker": "background.js"
   }
 }
+

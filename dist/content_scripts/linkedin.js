@@ -1,1 +1,0 @@
-setLinekincrfToken();const interval=setInterval((()=>{setLinekincrfToken()}),5e3);function setLinekincrfToken(){try{const n=new RegExp('JSESSIONID=["]*(.*?)["]*;');if(document.cookie.match(n)&&chrome.runtime?.id){var e=document.cookie.match(n)[1];chrome.storage.local.set({csrf_token:e})}else clearInterval(interval)}catch(e){}}
