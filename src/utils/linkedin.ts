@@ -13,6 +13,7 @@ export const linkedinApiCall = async <ResponseType>(
         ...options.headers,
         "csrf-token": csrfToken,
       },
+      credentials: "include",
     })
       .then((response) => {
         if (response.status > 300) {
@@ -21,7 +22,6 @@ export const linkedinApiCall = async <ResponseType>(
         return response.json() as ResponseType;
       })
       .catch((error) => {
-        // Improve error handling here:
         if (error instanceof Error) {
           const errorDetails = {
             message: error.message,
